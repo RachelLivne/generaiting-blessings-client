@@ -1,25 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import GreetingsForm from './Component/GreetingsForm';
+import GreetingsResult from './Component/GreetingsResult';
 
-function App() {
+const App = () => {
+  const [showResult, setShowResult] = useState(false);
+  const [result, setResult] = useState('');
+  const [formData, setFormData] = useState({});
+
+  const handleSubmitForm = (data) => {
+    // Here you can make a request to your GPT server or handle the data as needed
+    // For now, let's just simulate it by joining the data into a string
+    const generatedGreeting = Object.values(data).join(' ');
+    setResult(generatedGreeting);
+    setFormData(data);
+    setShowResult(true);
+  };
+
+  const handleRestart = () => {
+    setShowResult(false);
+    setResult('');
+    setFormData({});
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {!showResult ? (
+        <GreetingsForm onSubmit={handleSubmitForm} />
+      ) : (
+        <GreetingsResult result={result} onRestart={handleRestart} />
+      )}
     </div>
   );
-}
+};
 
 export default App;
