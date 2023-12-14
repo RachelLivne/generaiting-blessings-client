@@ -1,12 +1,35 @@
-import React, { useState } from 'react';
-
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 const GreetingsForm = ({ onSubmit }) => {
   const [eventType, setEventType] = useState('');
   const [age, setAge] = useState('');
   const [greetingType, setGreetingType] = useState('');
   const [mood, setMood] = useState('');
+  const [data, setData] = useState("");
 
-  const handleSubmit = () => {
+  const tryFunc=async()=>{
+    try {
+      const response = await axios.get('http://localhost:3001/api/data');
+      console.log("res",response)
+      setData(response.data);
+  } catch (error) {
+      console.error('Error fetching data:', error);
+  }
+  }
+//   useEffect(() => {
+//     const fetchData = async () => {
+//         try {
+//             const response = await axios.get('http://localhost:3001/api/data');
+//             setData(response.data);
+//         } catch (error) {
+//             console.error('Error fetching data:', error);
+//         }
+//     };
+
+//     fetchData();
+// }, []);
+
+  const handleSubmit =async () => {
     onSubmit({ eventType, age, greetingType, mood });
   };
 
@@ -44,6 +67,14 @@ const GreetingsForm = ({ onSubmit }) => {
         </select>
       </label>
       <button onClick={handleSubmit}>Generate Greeting</button>
+      <button onClick={tryFunc}>click</button>
+      <div>
+            {data ? (
+                <p>Data from the server: {data}</p>
+            ) : (
+                <p>Loading...</p>
+            )}
+        </div>
     </div>
   );
 };
