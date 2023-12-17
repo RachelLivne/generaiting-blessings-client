@@ -6,10 +6,14 @@ const GreetingsForm = ({ onSubmit }) => {
   const [greetingType, setGreetingType] = useState('');
   const [mood, setMood] = useState('');
   const [data, setData] = useState("");
-
+  const [postData, setPostData] = useState({
+    prompt : 'תכתוב לי ברכה ליומולדת לילד שנהיה בן 3',
+    temperature: 0.8,
+  });
   const tryFunc=async()=>{
     try {
-      const response = await axios.get('http://localhost:3001/api/data');
+      // const response = await axios.get('http://localhost:3001/api/data');
+    const response = await axios.post('http://localhost:3001/generate',postData);
       console.log("res",response)
       setData(response.data);
   } catch (error) {
