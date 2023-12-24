@@ -1,86 +1,181 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import GreetingsResult from './GreetingsResult';
 const GreetingsForm = ({ onSubmit }) => {
   const [eventType, setEventType] = useState('');
-  const [age, setAge] = useState('');
+  const [age, setAge] = useState(0);
+  const [NameOfWedding, setNameOfWedding] = useState("");
+  const [DateOfWedding, setDateOfWedding] = useState(new Date());
   const [greetingType, setGreetingType] = useState('');
   const [mood, setMood] = useState('');
   const [data, setData] = useState("");
+  const [prompt, setPrompt] = useState("");
+  const [selectedEvent, setSelectedEvent] = useState(null);
+
+  // const EventSelector = () => {
+  // const [selectedEvent, setSelectedEvent] = useState(null);
   const [postData, setPostData] = useState({
-    prompt : 'תכתוב לי ברכה ליומולדת לילד שנהיה בן 3',
+    prompt: 'תכתוב לי ברכה ליומולדת לילד שנהיה בן 3',
     temperature: 0.8,
   });
-  const tryFunc=async()=>{
+  const tryFunc = async () => {
     try {
       // const response = await axios.get('http://localhost:3001/api/data');
-    const response = await axios.post('http://localhost:3001/generate',postData);
-      console.log("res",response)
+      const response = await axios.post('http://localhost:3001/generate', postData);
+      console.log("res", response)
       setData(response.data);
-  } catch (error) {
+    } catch (error) {
       console.error('Error fetching data:', error);
+    }
   }
-  }
-//   useEffect(() => {
-//     const fetchData = async () => {
-//         try {
-//             const response = await axios.get('http://localhost:3001/api/data');
-//             setData(response.data);
-//         } catch (error) {
-//             console.error('Error fetching data:', error);
-//         }
-//     };
+  //   useEffect(() => {
+  //     const fetchData = async () => {
+  //         try {
+  //             const response = await axios.get('http://localhost:3001/api/data');
+  //             setData(response.data);
+  //         } catch (error) {
+  //             console.error('Error fetching data:', error);
+  //         }
+  //     };
 
-//     fetchData();
-// }, []);
+  //     fetchData();
+  // }, []);
+  // const handleEventChange = (event) => {
+  //     setSelectedEvent(event);
+  //   };
 
-  const handleSubmit =async () => {
-    onSubmit({ eventType, age, greetingType, mood });
+  const handleEventChange = (event) => {
+    setSelectedEvent(event);
   };
+
+  const writePrompt = async () => {
+    if (selectedEvent == "wedding") {
+      let prompt1 = `
+      I want an array that contains 3 options for  ${selectedEvent} greetings that the names of
+       the bride and groom are ${NameOfWedding} and the date of the wedding is the ${DateOfWedding}
+        that the blessings will be in a ${mood} and ${greetingType} that the blessings will be written
+         in Hebrew
+     
+      `
+      setPrompt(prompt1)
+
+
+    }
+    else {
+      let prompt2 = `
+      I want an array that contains 3 options for  ${selectedEvent} greetings that the age
+      is ${age}
+        that the blessings will be in a ${mood} and ${greetingType} that the blessings will be written
+         in Hebrew`
+      setPrompt(prompt2)
+    }
+
+    genereteBlessings()
+
+  }
+
+  const genereteBlessings =async()=>{
+    try {
+      // const response = await axios.post('http://localhost:3001/generate', prompt);
+      // console.log("res", response)
+      // setData(response.data);
+      let res="hello"
+      setData(res)
+      alert(data)
+    } 
+    catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
+
+  const handleSubmit = async () => {
+    onSubmit(prompt)
+ }
+
+
+
+
 
   return (
     <div>
-      <h2>Greetings Form</h2>
-      <label>
-        Event Type:
-        <select value={eventType} onChange={(e) => setEventType(e.target.value)}>
-        <option value="birthday">Birthday</option>
-          <option value="wedding">Wedding</option>
-          {/* Add more event types as needed */}
+      <div>
+        <h2>בחר אירוע:</h2>
+        <select onChange={(e) => handleEventChange(e.target.value)}>
+          <option value="">בחר אירוע</option>
+          <option value="birthday">יומולדת</option>
+          <option value="wedding">חתונה</option>
+          {/* ניתן להוסיף עוד אירועים כרצונך */}
         </select>
-      </label>
-      {eventType === 'birthday' && (
-        <label>
-          Age:
-          <input type="number" value={age} onChange={(e) => setAge(e.target.value)} />
-        </label>
-      )}
+
+        {selectedEvent && (
+          <div>
+            <h3>{selectedEvent}</h3>
+            {selectedEvent === 'birthday' && (
+              <div>
+                <label>
+                  מה הגיל?:
+                  <input type="number" value={age} onChange={(e) => setAge(e.target.value)} />
+                </label>              {/* ניתן להוסיף כל שאלה נוספת כרצונך */}
+              </div>
+            )}
+            {selectedEvent === 'wedding' && (
+              <div>
+                <label>
+                  מה התאריך של החתונה
+                  <input type="date" value={DateOfWedding} onChange={(e) => setDateOfWedding(e.target.value)} />
+
+                </label>
+                <label>
+                  ? ומה שמות החתן והכלה
+                  <input type="text" value={NameOfWedding} onChange={(e) => setNameOfWedding(e.target.value)} />
+                </label>
+              </div>
+            )}
+
+          </div>
+        )}
+      </div>
+
       <label>
         Greeting Type:
         <select value={greetingType} onChange={(e) => setGreetingType(e.target.value)}>
           <option value="short">Short</option>
           <option value="long">Long</option>
-          {/* Add more greeting types as neede
-          </select>
+        </select>
       </label>
+
       <label>
         Mood:
         <select value={mood} onChange={(e) => setMood(e.target.value)}>
           <option value="happy">Happy</option>
           <option value="funny">Funny</option>
-          {/* Add more moods as needed */}
         </select>
       </label>
       <button onClick={handleSubmit}>Generate Greeting</button>
       <button onClick={tryFunc}>click</button>
       <div>
-            {data ? (
-                <p>Data from the server: {data}</p>
-            ) : (
-                <p>Loading...</p>
-            )}
-        </div>
+        {data ? (
+          <p>Data from the server: {data}</p>
+        ) : (
+          <p>Loading...</p>
+        )}
+      </div>
+      {data ? (
+          <GreetingsResult data={data} /> 
+        ) : (
+          <p>Loading...</p>
+        )}
+      {/* <p>
+        {prompt}
+      </p> */}
     </div>
+
+
+
+
+
+
   );
-};
+}
 
 export default GreetingsForm;

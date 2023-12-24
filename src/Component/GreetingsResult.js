@@ -1,10 +1,10 @@
 import React from 'react';
 
-const GreetingsResult = ({ result, onRestart }) => {
+const GreetingsResult = ({ data, onRestart }) => {
   return (
     <div>
       <h2>Greetings Result</h2>
-      <p>{result}</p>
+      <p>{data}</p>
       <button onClick={onRestart}>I want something else</button>
     </div>
   );
