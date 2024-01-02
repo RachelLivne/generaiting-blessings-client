@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import GreetingsResult from './GreetingsResult';
-const GreetingsForm = ({ onSubmit }) => {
+const GreetingsForm = ({ }) => {
   const [eventType, setEventType] = useState('');
   const [age, setAge] = useState(0);
   const [NameOfWedding, setNameOfWedding] = useState("");
@@ -101,7 +101,6 @@ const GreetingsForm = ({ onSubmit }) => {
       <div>
         <h2>בחר אירוע:</h2>
         <select onChange={(e) => handleEventChange(e.target.value)}>
-          <option value="">בחר אירוע</option>
           <option value="birthday">יומולדת</option>
           <option value="wedding">חתונה</option>
           {/* ניתן להוסיף עוד אירועים כרצונך */}
@@ -151,7 +150,7 @@ const GreetingsForm = ({ onSubmit }) => {
           <option value="funny">Funny</option>
         </select>
       </label>
-      <button onClick={handleSubmit}>Generate Greeting</button>
+      <button onClick={writePrompt}>Generate Greeting</button>
       <button onClick={tryFunc}>click</button>
       <div>
         {data ? (
