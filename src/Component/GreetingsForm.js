@@ -12,15 +12,13 @@ const GreetingsForm = ({ }) => {
   const [prompt, setPrompt] = useState("");
   const [selectedEvent, setSelectedEvent] = useState(null);
 
-  // const EventSelector = () => {
-  // const [selectedEvent, setSelectedEvent] = useState(null);
+
   const [postData, setPostData] = useState({
     prompt: 'תכתוב לי ברכה ליומולדת לילד שנהיה בן 3',
     temperature: 0.8,
   });
   const tryFunc = async () => {
     try {
-      // const response = await axios.get('http://localhost:3001/api/data');
       const response = await axios.post('http://localhost:3001/generate', postData);
       console.log("res", response)
       setData(response.data);
@@ -28,21 +26,8 @@ const GreetingsForm = ({ }) => {
       console.error('Error fetching data:', error);
     }
   }
-  //   useEffect(() => {
-  //     const fetchData = async () => {
-  //         try {
-  //             const response = await axios.get('http://localhost:3001/api/data');
-  //             setData(response.data);
-  //         } catch (error) {
-  //             console.error('Error fetching data:', error);
-  //         }
-  //     };
 
-  //     fetchData();
-  // }, []);
-  // const handleEventChange = (event) => {
-  //     setSelectedEvent(event);
-  //   };
+
 
   const handleEventChange = (event) => {
     setSelectedEvent(event);
@@ -74,23 +59,19 @@ const GreetingsForm = ({ }) => {
 
   }
 
-  const genereteBlessings =async()=>{
+  const genereteBlessings = async () => {
     try {
-      // const response = await axios.post('http://localhost:3001/generate', prompt);
-      // console.log("res", response)
-      // setData(response.data);
-      let res="hello"
-      setData(res)
+      const response = await axios.post('http://localhost:3001/generate', prompt);
+      console.log("res", response)
+      setData(response.data);
       alert(data)
-    } 
+    }
     catch (error) {
       console.error('Error fetching data:', error);
     }
   }
 
-  const handleSubmit = async () => {
-    onSubmit(prompt)
- }
+ 
 
 
 
@@ -103,7 +84,7 @@ const GreetingsForm = ({ }) => {
         <select onChange={(e) => handleEventChange(e.target.value)}>
           <option value="birthday">יומולדת</option>
           <option value="wedding">חתונה</option>
-          {/* ניתן להוסיף עוד אירועים כרצונך */}
+
         </select>
 
         {selectedEvent && (
@@ -114,7 +95,7 @@ const GreetingsForm = ({ }) => {
                 <label>
                   מה הגיל?:
                   <input type="number" value={age} onChange={(e) => setAge(e.target.value)} />
-                </label>              {/* ניתן להוסיף כל שאלה נוספת כרצונך */}
+                </label>
               </div>
             )}
             {selectedEvent === 'wedding' && (
@@ -151,7 +132,6 @@ const GreetingsForm = ({ }) => {
         </select>
       </label>
       <button onClick={writePrompt}>Generate Greeting</button>
-      <button onClick={tryFunc}>click</button>
       <div>
         {data ? (
           <p>Data from the server: {data}</p>
@@ -160,10 +140,10 @@ const GreetingsForm = ({ }) => {
         )}
       </div>
       {data ? (
-          <GreetingsResult data={data} /> 
-        ) : (
-          <p>Loading...</p>
-        )}
+        <GreetingsResult data={data} />
+      ) : (
+        <p>Loading...</p>
+      )}
       {/* <p>
         {prompt}
       </p> */}
